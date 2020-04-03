@@ -122,12 +122,18 @@ class Upload_data extends MX_Controller
     	echo json_encode($information);
     }
     function compareShiftCode($shift,$list_shift){
+    	$result = 0;
     	foreach ($list_shift as $key) {
             if (strtolower(trim($shift)) == $key['shift']) {
                 $result = $key['idx'];
             }
         }
-        //die(print_r($colordatas));
+        if ($result == 0) {
+        	$information['message'] = 'Ada kesalahan pada data. Tolong rollback dan periksa kembali kode shift di rooster!';
+            $information['alert-title'] = 'Error!';
+            $information['alert-class'] = 'error';
+			die(json_encode($information));
+        }
         return $result;
     }
     // ------------------------------------------------
