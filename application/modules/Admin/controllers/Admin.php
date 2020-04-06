@@ -62,6 +62,14 @@ class Admin extends MX_Controller
 
     	$this->load->view('includes/template',$data);
     }
+    function report()
+    {
+    	$data['main_content'] = 'report';
+    	$data['main_menu'] = $this->globals->menu(0,$h="",$c="submenu");
+		$data['page_title'] = $this->globals->p_title($data['main_content']);
+
+    	$this->load->view('includes/template',$data);
+    }
     // ------------------------------------------------
     function logoff()
     {

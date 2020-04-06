@@ -15,6 +15,7 @@
         <link href="<?php echo base_url(); ?>assets/libs/dropify/dropify.min.css" rel="stylesheet" type="text/css" />
         <link href="<?php echo base_url(); ?>assets/libs/jquery-toast/jquery.toast.min.css" rel="stylesheet" type="text/css" />
         <link href="<?php echo base_url(); ?>assets/libs/ladda/ladda-themeless.min.css" rel="stylesheet" type="text/css">
+        <link href="<?php echo base_url(); ?>assets/libs/select2/select2.min.css" rel="stylesheet" type="text/css" />
 
         <!-- App css -->
         <link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />

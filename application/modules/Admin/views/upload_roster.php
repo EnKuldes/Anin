@@ -1,23 +1,3 @@
-<div class="container-fluid">
-	<!-- start page title -->
-    <div class="row">
-        <div class="col-12">
-            <div class="page-title-box">
-                <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Anin</a></li>
-                        <?php 
-                        	for ($i=1; $i <= $this->uri->total_segments(); $i++) { 
-                        		echo "<li class='breadcrumb-item'><a href='javascript: void(0);'>".ucwords(str_replace("_", " ",$this->uri->segment($i)))."</a></li>";
-                        	}
-                        ?>
-                    </ol>
-                </div>
-                <h4 class="page-title"><?php echo substr($page_title, 0, strpos($page_title, '-')); ?></h4>
-            </div>
-        </div>
-    </div>     
-    <!-- end page title --> 
 	
     <div class="row">
         <div class="col-12">
@@ -40,8 +20,6 @@
         </div><!-- end col -->
     </div>
     <!-- end row --> 
-
-</div>
 
 <!-- Plugins js -->
 <script src="<?php echo base_url(); ?>assets/libs/dropify/dropify.min.js"></script>
