@@ -17,7 +17,7 @@ class Admin extends MX_Controller
 		$auth = $this->auth_model->get_link_auth($cont,$no_perner);
 		// Check is Logged In?
 		if ($this->session->userdata('is_logged_in')) {
-			if ($auth != 0) {
+			if ($auth != 0 && $this->session->userdata('user_group') == 2) {
 				$this->load->helper('url');
 				//$this->load->model("admin_model");
 				$this->load->library('../controllers/Globals');
