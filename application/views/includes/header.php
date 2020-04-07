@@ -76,7 +76,7 @@
                                 <div class="dropdown-divider"></div>
 
                                 <!-- item-->
-                                <a href="<?php echo base_url(); ?>Admin/logoff" class="dropdown-item notify-item">
+                                <a href="<?php echo base_url(); ?>Globals/logoff" class="dropdown-item notify-item">
                                     <i class="fe-log-out"></i>
                                     <span>Logout</span>
                                 </a>

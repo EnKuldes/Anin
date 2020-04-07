@@ -85,6 +85,12 @@ class Globals extends MX_Controller
 
 		return $hasil;
 	}
+	// ------------------------------------------------
+    function logoff()
+    {
+    	$this->session->sess_destroy();
+		redirect(base_url('Attendance'));
+    }
 	
 }
 
