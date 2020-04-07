@@ -30,5 +30,20 @@ class Agent_model extends CI_Model {
 		return $result->result_array();
 
 	}
+
+	public function get_roster_summary($prener_id)
+	{
+		$this->db->select('
+			SUM(CASE WHEN id_shift NOT IN (6,7,8,9,10) THEN 1 ELSE 0 END) AS counter_hk
+			, SUM(CASE WHEN id_shift IN (6,7,8,9,10) THEN 1 ELSE 0 END) AS counter_libur
+			, SUM(CASE WHEN status_absensi NOT IN (10,11,12) THEN 1 ELSE 0 END) AS counter_kehadiran
+			, SUM(CASE WHEN status_absensi IN (10,11,12) THEN 1 ELSE 0 END) AS counter_ketidakhadiran
+			');
+		$this->db->from('tb_rooster');
+		$this->db->where('tb_rooster.no_perner = '.$prener_id.' AND MONTH(tb_rooster.rooster_date) = MONTH(CURDATE()) AND YEAR(tb_rooster.rooster_date) = YEAR(CURDATE())');
+		
+		$result = $this->db->get();
+		return $result->result_array();
+	}
 	
 }

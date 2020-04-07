@@ -49,14 +49,24 @@ class Agent extends MX_Controller
     	foreach ($datas as $data) {
     		$result['data'][] = [
     			"id"=>$data['idx'],
+    			"perner"=>$data['no_perner'],
 				"title"=>$data['shift'].' '.$data['shift_desc'],
-				"start"=>$data['rooster_date'].' '.$data['waktu_masuk'],
-				"end"=>$data['rooster_date'].' '.$data['waktu_keluar'],
+				// "start"=>$data['rooster_date'].' '.$data['waktu_masuk'],
+				// "end"=>$data['rooster_date'].' '.$data['waktu_keluar'],
+				"start"=>$data['rooster_date'],
+				"end"=>$data['rooster_date'],
 				"absensi_masuk"=>$data['absensi_masuk'],
-				"absensi_keluar"=>$data['absensi_keluar']
+				"absensi_keluar"=>$data['absensi_keluar'],
+				"waktu_masuk"=>$data['waktu_masuk'],
+				"waktu_keluar"=>$data['waktu_keluar']
     		];
     	}
     	echo json_encode($result);
+    }
+    function get_roster_summary()
+    {
+    	$datas = $this->agent_model->get_roster_summary($this->session->userdata('prener_id'));
+    	echo json_encode($datas);
     }
     // ------------------------------------------------
     function logoff()
