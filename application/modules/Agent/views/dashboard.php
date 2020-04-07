@@ -153,7 +153,7 @@
         eventClick: function(eventObj, jsEvent, view) {
             var content = '<div class="row"><div class="col-sm-6"><img src="<?php echo base_url(); ?>uploads/attendance/'+ eventObj.perner +'_'+ moment(eventObj.absensi_masuk).format('YYYYMMDD_HHmmss') +'_login.png" alt="login_snap" class="img-fluid rounded" width="200">';
             content += '<p class="mb-0">Absensi masuk: ' + eventObj.absensi_masuk +'</p></div>';
-            content += '<div class="col-sm-6"><img src="<?php echo base_url(); ?>uploads/attendance/'+ eventObj.perner +'_'+ moment(eventObj.absensi_masuk).format('YYYYMMDD_HHmmss') +'_logout.png" alt="logout_snap" class="img-fluid rounded" width="200">';
+            content += '<div class="col-sm-6"><img src="<?php echo base_url(); ?>uploads/attendance/'+ eventObj.perner +'_'+ moment(eventObj.absensi_keluar).format('YYYYMMDD_HHmmss') +'_logout.png" alt="logout_snap" class="img-fluid rounded" width="200">';
             content += '<p class="mb-0">Absensi keluar: ' + eventObj.absensi_keluar +'</p></div></div>';
             $('#myModal .modal-dialog .modal-content .modal-body').html(content);
             $('#myModal').modal('show');
