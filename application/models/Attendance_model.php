@@ -9,6 +9,7 @@ class Attendance_model extends CI_Model {
 	}
 	function attend($prener_id,$today_date,$vData)
 	{	
+		$this->db->set('status_absensi', 'id_shift', false);
 		$this->db->where('no_perner', $prener_id);
 		$this->db->where("rooster_date", $today_date);
 		$this->db->update('tb_rooster', $vData);

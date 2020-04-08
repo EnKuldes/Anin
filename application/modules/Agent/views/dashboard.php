@@ -140,16 +140,16 @@
         }
         // any other sources...
         ],
-        eventRender: function(eventObj, $el) {
-            var content = 'Jadwal Jam masuk: ' + eventObj.waktu_masuk + '\nJadwal Jam keluar: ' + eventObj.waktu_keluar;
-            $el.popover({
-              title: eventObj.title,
-              content: content,
-              trigger: 'hover',
-              placement: 'top',
-              container: 'body'
-            });
-          },
+        // eventRender: function(eventObj, $el) {
+        //     var content = 'Jadwal Jam masuk: ' + eventObj.waktu_masuk + '\nJadwal Jam keluar: ' + eventObj.waktu_keluar;
+        //     $el.popover({
+        //       title: eventObj.title,
+        //       content: content,
+        //       trigger: 'hover',
+        //       placement: 'top',
+        //       container: 'body'
+        //     });
+        //   },
         eventClick: function(eventObj, jsEvent, view) {
             var content = '<div class="row"><div class="col-sm-6"><img src="<?php echo base_url(); ?>uploads/attendance/'+ eventObj.perner +'_'+ moment(eventObj.absensi_masuk).format('YYYYMMDD_HHmmss') +'_login.png" alt="login_snap" class="img-fluid rounded" width="200">';
             content += '<p class="mb-0">Absensi masuk: ' + eventObj.absensi_masuk +'</p></div>';
