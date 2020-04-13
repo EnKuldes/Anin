@@ -86,7 +86,7 @@ class Attendance extends MX_Controller
 			else{
 				$vArrivalIdx = 2;
 			}
-			if ($status_attend[0]["id_shift"] == 3 OR $status_attend[0]["id_shift"] == 4 ) {
+			if ( $status_attend[0]["id_shift"] == 6 ) {
 				$vArrivalIdx = 2;
 			}
 			$welcome_message = $this->attendance_model->get_welcome_message($sArrival,$vArrivalIdx);
