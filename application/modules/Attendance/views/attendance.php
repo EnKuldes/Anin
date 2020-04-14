@@ -205,7 +205,7 @@
                             Swal.fire({
                               //title: 'Sweet!!',
                               html: results[0]["c_message"],
-                              timer: 3000,
+                              timer: 5000,
                               imageUrl: imgurl,
                               imageWidth: 320,
                               imageHeight: 300,

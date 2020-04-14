@@ -19,7 +19,7 @@ class Admin extends MX_Controller
 		if ($this->session->userdata('is_logged_in')) {
 			if ($auth != 0 && $this->session->userdata('user_group') == 2) {
 				$this->load->helper('url');
-				//$this->load->model("admin_model");
+				$this->load->model("admin_model");
 				$this->load->library('../controllers/Globals');
 			}
 			else{
@@ -71,11 +71,34 @@ class Admin extends MX_Controller
     	$this->load->view('includes/template',$data);
     }
     // ------------------------------------------------
-    function logoff()
+    function get_list_layanan()
     {
-    	$this->session->sess_destroy();
-		redirect(base_url('Attendance'));
+    	$datas = $this->admin_model->get_list_layanan();
+    	echo json_encode($datas);
     }
+    function get_roster_information()
+    {
+    	$id_layanan = $this->input->post('id_layanan');
+    	$whereCon = '= CURDATE()';
+    	$groupBy = '';
+    	$datas = $this->admin_model->get_roster_information($id_layanan, $whereCon, $groupBy);
+    	echo json_encode($datas);
+    }
+    function get_trend_roster_information()
+    {
+    	$id_layanan = $this->input->post('id_layanan');
+    	$whereCon = 'BETWEEN CURDATE() - INTERVAL 7 DAY AND CURDATE()';
+    	$groupBy = 'rooster_date';
+    	$datas = $this->admin_model->get_roster_information($id_layanan, $whereCon, $groupBy);
+    	echo json_encode($datas);
+    }
+    function get_attendance_information()
+    {
+    	$id_layanan = $this->input->post('id_layanan');
+    	$datas = $this->admin_model->get_attendance_information($id_layanan);
+    	echo json_encode($datas);
+    }
+
 }
 
 ?>
