@@ -343,6 +343,9 @@
                             if ( null !== result[j]['waktu_absensi'] && undefined !== result[j]['waktu_absensi'] ) {
                                 var snap_datetime = moment(result[j]['waktu_absensi'], 'YYYY-MM-DD HH:mm:ss').format('YYYYMMDD_HHmmss');
                                 image_url = result[j]['no_perner'] + '_' + snap_datetime;
+                                if (result[j]['log_status'] != 0) {
+                                    image_url += (result[j]['log_status'] == 1) ? '_login' : '_logout';
+                                }
                             }
                             div_content += '<div class="col-md-3"><div class="card-box product-box"><div class="product-img-bg"><img src="<?php echo base_url(); ?>uploads/attendance/'+ image_url +'.png" alt="absensi-'+ result[j]['user_name'] + '" class="img-fluid" /></div>';
                             div_content += '<div class="product-info"><div class="row align-items-center"><div class="col"><h5 class="font-16 mt-0 sp-line-1"><a href="ecommerce-prduct-detail.html" class="text-light">'+ result[j]['user_name'] + '</a> </h5>';
