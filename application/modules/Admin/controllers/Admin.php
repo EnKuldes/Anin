@@ -130,7 +130,11 @@ class Admin extends MX_Controller
     	}
     	echo json_encode($datas);
     }
-
+    function download_format_upload()
+    {
+    	$this->load->helper('download');
+    	force_download(FCPATH . "/uploads/format/Contoh_Format_Upload.xlsx", NULL);
+    }
 }
 
 ?>

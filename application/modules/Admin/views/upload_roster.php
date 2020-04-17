@@ -12,6 +12,7 @@
                         <input type="file" class="dropify" name="file" id="file" data-height="100" data-allowed-file-extensions="xlsx" />
                     </form>
                     <div class="clearfix text-right mt-3">
+                        <button type="button" class="btn btn-primary" id="btn-format-upload"> <i class="mdi mdi-file-document mr-1"></i> Contoh Format Upload</button>
                         <button type="button" class="btn btn-danger" id="btn-rollback"> <i class="mdi mdi-backup-restore mr-1"></i> Rollback</button>
                         <button class="ladda-button btn btn-success" data-style="expand-right" form="upload_roster" id="btn-submit"><span class="ladda-label"> <i class="mdi mdi-send mr-1"></i> Submit</span><span class="ladda-spinner"></span></button>
                     </div>
@@ -38,6 +39,15 @@
     $('#btn-rollback').on('click', function(e){
         e.preventDefault();
         notificationScript('warning', 'Warning!', 'Masih dalam tahap development');
+    });
+    $('#btn-format-upload').on('click', function(e){
+        e.preventDefault();
+        //notificationScript('warning', 'Warning!', 'Masih dalam tahap development');
+        var form = document.createElement("form");
+        form.setAttribute("method", 'post');
+        form.setAttribute("action", '<?php echo base_url(); ?>Admin/download_format_upload');
+        document.body.appendChild(form);
+        form.submit();
     });
     $('#upload_roster').on('submit', function(e){
         e.preventDefault();
