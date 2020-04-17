@@ -60,5 +60,51 @@ class Admin_model extends CI_Model {
 		return $result;
 
 	}
+
+	function get_year_list($layanan_id)
+	{
+		$this->db->select('DISTINCT YEAR(tb_rooster.rooster_date) AS year');
+		$this->db->from('tb_rooster');
+		$this->db->where('no_perner IN (SELECT no_perner FROM ci_user WHERE layanan_id = '.$layanan_id.')');
+		$this->db->order_by('rooster_date', 'desc');
+		$query = $this->db->get();
+		$result = $query->result_array();
+		return $result;
+	}
+	function get_month_list($layanan_id, $year)
+	{
+		$this->db->select('DISTINCT MONTH(tb_rooster.rooster_date) AS month');
+		$this->db->from('tb_rooster');
+		$this->db->where('no_perner IN (SELECT no_perner FROM ci_user WHERE layanan_id = '.$layanan_id.') AND YEAR(tb_rooster.rooster_date) = '.$year);
+		$query = $this->db->get();
+		$result = $query->result_array();
+		return $result;
+	}
+	function get_report($layanan_id, $year, $month)
+	{
+		$this->db->select('
+			ci_user.no_perner
+			, ci_user.user_name
+			, tb_rooster.rooster_date
+			, tb_rooster.id_shift
+			, c_shift.shift AS kode_shift
+			, IFNULL(tb_rooster.status_absensi, 0) AS status_absensi
+			, IF(c_shift.kategori_shift = 0, "danger", IF(c_shift.kategori_shift = 1, "primary", "warning") ) AS bg_color
+			, CONCAT(c_shift.shift, IF(
+			tb_rooster.id_shift = tb_rooster.status_absensi
+			, IF(c_shift.kategori_shift = 0 OR c_shift.kategori_shift = 2, "*", "")
+			, ""
+			)) AS keterangan_hadir
+			', false);
+		$this->db->from('tb_rooster');
+		$this->db->join('ci_user', 'ci_user.no_perner = tb_rooster.no_perner', 'right');
+		$this->db->join('c_shift', 'c_shift.idx = tb_rooster.id_shift', 'left');
+		$this->db->where('ci_user.layanan_id = '.$layanan_id.' AND YEAR(tb_rooster.rooster_date) = '.$year.' AND MONTH(tb_rooster.rooster_date) = '.$month.'');
+		$this->db->order_by('ci_user.no_perner', 'asc');
+		$this->db->order_by('tb_rooster.rooster_date', 'asc');
+		$query = $this->db->get();
+		$result = $query->result_array();
+		return $result;
+	}
 	
 }

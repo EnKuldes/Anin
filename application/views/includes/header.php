@@ -25,8 +25,12 @@
         <!-- Vendor js -->
         <script src="<?php echo base_url(); ?>assets/js/vendor.min.js"></script>
 
-        <!-- Plugins js 
-        JS at Body -->
+        <!-- Plugins js -->
+        <!-- Global Scripts -->
+        <script src="<?php echo base_url(); ?>assets/libs/jquery-toast/jquery.toast.min.js"></script>
+        <script src="<?php echo base_url(); ?>assets/libs/ladda/spin.js"></script>
+        <script src="<?php echo base_url(); ?>assets/libs/ladda/ladda.js"></script>
+        <script src="<?php echo base_url(); ?>assets/libs/moment/moment.min.js"></script>
         
         <!-- App js-->
         <script src="<?php echo base_url(); ?>assets/js/app.min.js"></script>

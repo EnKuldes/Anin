@@ -70,7 +70,6 @@
         </div><!-- /.modal-dialog -->
     </div>
 <!-- plugin js -->
-<script src="<?php echo base_url(); ?>assets/libs/moment/moment.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/libs/jquery-ui/jquery-ui.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/libs/fullcalendar/fullcalendar.min.js"></script>
 

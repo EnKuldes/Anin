@@ -98,6 +98,38 @@ class Admin extends MX_Controller
     	$datas = $this->admin_model->get_attendance_information($id_layanan);
     	echo json_encode($datas);
     }
+    function get_list_date()
+    {
+    	if ($this->input->post()) {
+    		if ($this->input->post('id_layanan')) {
+				$id_layanan = $this->input->post('id_layanan');
+    			if ($this->input->post('year')) {
+    				$year = $this->input->post('year');
+    				$datas = $this->admin_model->get_month_list($id_layanan, $year);
+    			}
+    			else{
+    				$datas = $this->admin_model->get_year_list($id_layanan);
+    			}
+    		}
+    	}
+    	else{
+    		throw new \Exception("Tidak ada variabel yang dikirim!");
+    	}
+    	echo json_encode($datas);
+    }
+    function get_report()
+    {
+    	if ($this->input->post()) {
+			$id_layanan = $this->input->post('id_layanan');
+			$year = $this->input->post('year');
+			$month = $this->input->post('month');
+			$datas = $this->admin_model->get_report($id_layanan, $year, $month);
+    	}
+    	else{
+    		throw new \Exception("Tidak ada variabel yang dikirim!");
+    	}
+    	echo json_encode($datas);
+    }
 
 }
 

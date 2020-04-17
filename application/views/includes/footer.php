@@ -15,10 +15,6 @@
             </div>
         </footer>
         <!-- end Footer -->
-        <!-- Global Scripts -->
-        <script src="<?php echo base_url(); ?>assets/libs/jquery-toast/jquery.toast.min.js"></script>
-        <script src="<?php echo base_url(); ?>assets/libs/ladda/spin.js"></script>
-        <script src="<?php echo base_url(); ?>assets/libs/ladda/ladda.js"></script>
         <script type="text/javascript">
             // Func Notification
             function notificationScript(type, title, message) {
