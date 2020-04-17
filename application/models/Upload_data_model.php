@@ -24,4 +24,30 @@ class Upload_data_model extends CI_Model {
 		$affected_rows = $this->db->affected_rows();
 		return $affected_rows;
 	}
+	function upload_v2($data,$table) // khusus upload roster
+	{
+		$jumlah_data = 0;
+		for ($i=0; $i < count($data) ; $i++) { 
+			/*$this->db->insert($table, $data[$i]);
+			$this->db->where('no_perner', $data[$i]['no_perner']);
+			$this->db->where('rooster_date', $data[$i]['rooster_date']);
+			$this->db->update($table, $data[$i]);*/
+			
+			$this->db->where('no_perner', $data[$i]['no_perner']);
+			$this->db->where('rooster_date', $data[$i]['rooster_date']);
+			$cek = $this->db->get($table);
+			if ($cek->num_rows() > 0 ) {
+				$this->db->where('no_perner', $data[$i]['no_perner']);
+				$this->db->where('rooster_date', $data[$i]['rooster_date']);
+				$this->db->update($table, ['id_shift' => $data[$i]['id_shift'], 'lup' => date("Y-m-d H:m:s")]);
+			}
+			else{
+				$this->db->insert($table, $data[$i]);
+			}
+			if ($this->db->affected_rows() != 0) {
+				$jumlah_data++;
+			}
+		}
+		return $jumlah_data;
+	}
 }

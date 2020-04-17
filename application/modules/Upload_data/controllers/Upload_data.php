@@ -102,9 +102,9 @@ class Upload_data extends MX_Controller
 		    		);
 		    	}
 		    }
-		    $insert = $this->Upload_data_model->upload($data,"tb_rooster");
+		    $insert = $this->Upload_data_model->upload_v2($data,"tb_rooster");
 		    if ( $insert > 0 ) {
-		    	$information['message'] = 'Sukses mengunggah data.';
+		    	$information['message'] = 'Sukses mengunggah data. Dengan jumlah data '.$insert;
 	            $information['alert-title'] = 'Sukses!';
 	            $information['alert-class'] = 'success';
 		    }
