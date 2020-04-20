@@ -124,16 +124,85 @@ class Admin extends MX_Controller
 			$year = $this->input->post('year');
 			$month = $this->input->post('month');
 			$datas = $this->admin_model->get_report($id_layanan, $year, $month);
+			for ($i=0; $i < count($datas) ; $i++) { 
+				$kode_shift = $datas[$i]['kode_shift'];
+				$roster_shift = $datas[$i]['id_shift'];
+				$status_absensi = $datas[$i]['status_absensi'];
+				$kategori_shift = $datas[$i]['kategori_shift'];
+
+				if ($status_absensi > 0) {
+					if ($kategori_shift != 1) { // Bukan roster masuk
+						$datas[$i]['absensi'] = $kode_shift.'*';
+					}
+					else{$datas[$i]['absensi'] = $kode_shift;}
+				}
+				else{
+					if ($kategori_shift != 1) { // Bukan roster masuk
+						$datas[$i]['absensi'] = $kode_shift;
+					}
+					else{$datas[$i]['absensi'] = '-';}
+				}
+			}
+			echo json_encode($datas);
     	}
     	else{
     		throw new \Exception("Tidak ada variabel yang dikirim!");
     	}
-    	echo json_encode($datas);
     }
     function download_format_upload()
     {
     	$this->load->helper('download');
     	force_download(FCPATH . "/uploads/format/Contoh_Format_Upload.xlsx", NULL);
+    }
+    function download_report()
+    {
+    	if ($this->input->post()) {
+			$id_layanan = $this->input->post('id_layanan');
+			$year = $this->input->post('year');
+			$month = $this->input->post('month');
+			$datas = $this->admin_model->get_report($id_layanan, $year, $month);
+			for ($i=0; $i < count($datas) ; $i++) { 
+				$kode_shift = $datas[$i]['kode_shift'];
+				$roster_shift = $datas[$i]['id_shift'];
+				$status_absensi = $datas[$i]['status_absensi'];
+				$kategori_shift = $datas[$i]['kategori_shift'];
+
+				if ($status_absensi > 0) {
+					if ($kategori_shift != 1) { // Bukan roster masuk
+						$datas[$i]['absensi'] = $kode_shift.'*';
+					}
+					else{$datas[$i]['absensi'] = $kode_shift;}
+				}
+				else{
+					if ($kategori_shift != 1) { // Bukan roster masuk
+						$datas[$i]['absensi'] = $kode_shift;
+					}
+					else{$datas[$i]['absensi'] = '-';}
+				}
+			}
+			
+			// List Prener dan Date
+			$list_perner = array_filter($datas, "no_perner");
+			$list_date = array_filter($datas, "rooster_date");
+			// Nulis Spreadsheet
+			$spreadsheet = new Spreadsheet();
+			$sheet = $spreadsheet->getActiveSheet();
+			// Kolom dan Baris Pertama
+			$sheet->setCellValue('A1', 'Prener');
+			$i = 2;
+			foreach ($list_perner as $key) {
+				$sheet->setCellValue('A'.$i, $key);
+			}
+
+
+			$writer = new Xlsx($spreadsheet);
+			$filepath = FCPATH . "/uploads/".date("Ymd_Gis").".xlsx";
+			echo $filepath;
+			$writer->save($filepath);
+    	}
+    	else{
+    		throw new \Exception("Tidak ada variabel yang dikirim!");
+    	}
     }
 }
 

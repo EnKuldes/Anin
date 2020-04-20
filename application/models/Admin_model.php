@@ -86,15 +86,11 @@ class Admin_model extends CI_Model {
 			ci_user.no_perner
 			, ci_user.user_name
 			, tb_rooster.rooster_date
-			, tb_rooster.id_shift
 			, c_shift.shift AS kode_shift
+			, tb_rooster.id_shift
 			, IFNULL(tb_rooster.status_absensi, 0) AS status_absensi
+			, c_shift.kategori_shift
 			, IF(c_shift.kategori_shift = 0, "danger", IF(c_shift.kategori_shift = 1, "primary", "warning") ) AS bg_color
-			, CONCAT(c_shift.shift, IF(
-			tb_rooster.id_shift = tb_rooster.status_absensi
-			, IF(c_shift.kategori_shift = 0 OR c_shift.kategori_shift = 2, "*", "")
-			, ""
-			)) AS keterangan_hadir
 			', false);
 		$this->db->from('tb_rooster');
 		$this->db->join('ci_user', 'ci_user.no_perner = tb_rooster.no_perner', 'right');

@@ -17,7 +17,7 @@
 					<a href="javascript: init();" class="btn btn-blue btn-sm ml-2">
 						<i class="mdi mdi-autorenew"></i>
 					</a>
-					<a href="javascript: void(0);" class="btn btn-blue btn-sm ml-1">
+					<a href="javascript: f_download_data();" class="btn btn-blue btn-sm ml-1">
 						<i class="mdi mdi-download"></i>
 					</a>
 				</form>
@@ -175,11 +175,7 @@
             	for (var j = 0; j < window['data'+list_perner[i]].length; j++) {
             		if (j == 0) {content += '<tr><th scope="row">'+ window['data'+list_perner[i]][j]['user_name'] +'</th>'}
             		if (list_date[j] == window['data'+list_perner[i]][j]['rooster_date'] ) {
-            			content += '<td';
-            			if ((window['data'+list_perner[i]][j]['status_absensi']/window['data'+list_perner[i]][j]['id_shift']) == 1) {
-            				content += ' class="text-'+ window['data'+list_perner[i]][j]['bg_color'] +'">'+window['data'+list_perner[i]][j]['kode_shift'];
-            			}
-            			else{content += '>-';}
+            			content += '<td class="text-'+ window['data'+list_perner[i]][j]['bg_color'] +'">'+window['data'+list_perner[i]][j]['absensi'];
             			content += '</td>';
             		}
             	}
@@ -222,7 +218,28 @@
 		return retArr;
 	}
 	function f_download_data() {
-		// body...
+		notificationScript('warning', 'Warning!', 'Masih dalam tahap development');
+        var form = document.createElement("form");
+        form.setAttribute("method", 'post');
+        form.setAttribute("action", '<?php echo base_url(); ?>Admin/download_report');
+        var id_layanan = document.createElement("input"); //input element, text
+		id_layanan.setAttribute('type',"text");
+		id_layanan.setAttribute('name',"id_layanan");
+		id_layanan.setAttribute('value',$('#list_layanan').val());
+		form.appendChild(id_layanan);
+		var year = document.createElement("input"); //input element, text
+		year.setAttribute('type',"text");
+		year.setAttribute('name',"year");
+		year.setAttribute('value',$('#list_year').val());
+		form.appendChild(year);
+		var month = document.createElement("input"); //input element, text
+		month.setAttribute('type',"text");
+		month.setAttribute('name',"month");
+		month.setAttribute('value',$('#list_month').val());
+		form.appendChild(month);
+
+        document.body.appendChild(form);
+        form.submit();
 	}
 	// On Change Events
     $("#list_layanan").change(function() {
