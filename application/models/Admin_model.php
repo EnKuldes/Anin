@@ -18,6 +18,17 @@ class Admin_model extends CI_Model {
 		return $result->result_array();
 	}
 
+	function get_layanan($layanan_id)
+	{
+		$this->db->select('c_layanan, layanan_desc');
+		$this->db->from('c_layanan');
+		$this->db->where('layanan_status', 1);
+		$this->db->where('c_layanan', $layanan_id);
+		$this->db->order_by('c_layanan', 'asc');
+		$result = $this->db->get();
+		return $result->row_array();;
+	}
+
 	function get_roster_information($layanan_id, $whereCon, $groupBy)
 	{
 		$this->db->select('

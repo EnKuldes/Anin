@@ -1,4 +1,8 @@
 <?php
+/* Manggil Class PHPSPreadsheet */
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * Attendance Class
@@ -181,22 +185,82 @@ class Admin extends MX_Controller
 				}
 			}
 			
+			// Nama Layanan
+			$layanan = $this->admin_model->get_layanan($id_layanan);
+			// Array Alfabet Kolom Excel
+			$abjad = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "AA", "AB", "AC", "AD", "AE", "AF", "AG", "AH", "AI", "AJ", "AK", "AL", "AM", "AN", "AO", "AP", "AQ", "AR", "AS", "AT", "AU", "AV", "AW", "AX", "AY", "AZ", "BA", "BB", "BC", "BD", "BE", "BF", "BG", "BH", "BI", "BJ", "BK", "BL", "BM", "BN", "BO", "BP", "BQ", "BR", "BS", "BT", "BU", "BV", "BW", "BX", "BY", "BZ"];
+
 			// List Prener dan Date
-			$list_perner = array_filter($datas, "no_perner");
-			$list_date = array_filter($datas, "rooster_date");
+			$temp_list_perner = array_unique(array_map(function ($i) { return $i['no_perner']; }, $datas));
+			$temp_list_date = array_unique(array_map(function ($i) { return $i['rooster_date']; }, $datas));
+			foreach ($temp_list_perner as $perner) {
+				$list_perner[] = $perner;
+			}
+			foreach ($temp_list_date as $date) {
+				$list_date[] = $date;
+			}
+			
 			// Nulis Spreadsheet
 			$spreadsheet = new Spreadsheet();
 			$sheet = $spreadsheet->getActiveSheet();
-			// Kolom dan Baris Pertama
-			$sheet->setCellValue('A1', 'Prener');
-			$i = 2;
-			foreach ($list_perner as $key) {
-				$sheet->setCellValue('A'.$i, $key);
+			
+			// Menyesuaikan dengan format
+			$sheet->setCellValue('A1', 'Absen '.date("M Y", strtotime($year.'-'.$month.'-01')));
+			$sheet->setCellValue('A2', $layanan['layanan_desc']);
+			$highCol = $abjad[count($list_date)+1];
+			$sheet->mergeCells('A1:'.$highCol.'1');
+			$sheet->mergeCells('A2:'.$highCol.'2');
+			$sheet->getStyle('A1:'.$highCol.'1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+			$sheet->getStyle('A2:'.$highCol.'2')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+			$sheet->getStyle('A1:'.$highCol.'1')->getFont()->setName('Cambria')->setSize(20)->setBold(1);
+			$sheet->getStyle('A2:'.$highCol.'2')->getFont()->setName('Cambria')->setSize(20)->setBold(1);
+			$sheet->setCellValue('A3', 'No.');
+			$sheet->mergeCells('A3:A4');
+			$sheet->getStyle('A3:A4')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+			$sheet->setCellValue('B3', 'Nama');
+			$sheet->mergeCells('B3:B4');
+			$sheet->getStyle('B3:B4')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+			$idx = 2;
+			foreach ($list_date as $date) {
+				$sheet->setCellValue($abjad[$idx].'3', date("d", strtotime($date)));
+				$sheet->setCellValue($abjad[$idx].'4', date("D", strtotime($date)));
+				$idx++;
 			}
 
+			for ($i=0; $i < count($list_perner) ; $i++) { 
+				$new_data[$list_perner[$i]] = [];
+				for ($j=0; $j < count($datas) ; $j++) { 
+					if ($list_perner[$i] == $datas[$j]['no_perner']) {
+						$new_data[$list_perner[$i]][] = $datas[$j];
+					}
+				}
+			}
+
+			for ($i=0; $i < count($list_perner) ; $i++) { 
+				for ($j=0; $j < count($new_data[$list_perner[$i]]) ; $j++) { 
+					if ($j == 0) {
+						$sheet->setCellValue('A'.($i+5), $i+1)
+							->setCellValue('B'.($i+5), $new_data[$list_perner[$i]][$j]['user_name']);
+					}
+					if ( $list_date[$j] == $new_data[$list_perner[$i]][$j]['rooster_date'] ) {
+						$sheet->setCellValue( $abjad[2+$j].($i+5), $new_data[$list_perner[$i]][$j]['absensi']);
+					}
+				}
+			}
+
+			// Style Cell Border
+			$styleArray = [
+				'borders' => [
+					'allBorders' => [
+						'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+						//'color' => ['argb' => 'FFFF0000'],
+					],
+				],
+			];
+			$sheet->getStyle('A3:'.$highCol.(count($list_perner)+4))->applyFromArray($styleArray);
 
 			$writer = new Xlsx($spreadsheet);
-			$filepath = FCPATH . "/uploads/".date("Ymd_Gis").".xlsx";
+			$filepath = FCPATH . "/uploads/Absen ".$layanan['layanan_desc']." Bogor ".date("M Y", strtotime($year.'-'.$month.'-01')).".xlsx";
 			echo $filepath;
 			$writer->save($filepath);
     	}
