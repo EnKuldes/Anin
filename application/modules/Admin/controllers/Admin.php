@@ -189,6 +189,7 @@ class Admin extends MX_Controller
 			$layanan = $this->admin_model->get_layanan($id_layanan);
 			// Array Alfabet Kolom Excel
 			$abjad = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "AA", "AB", "AC", "AD", "AE", "AF", "AG", "AH", "AI", "AJ", "AK", "AL", "AM", "AN", "AO", "AP", "AQ", "AR", "AS", "AT", "AU", "AV", "AW", "AX", "AY", "AZ", "BA", "BB", "BC", "BD", "BE", "BF", "BG", "BH", "BI", "BJ", "BK", "BL", "BM", "BN", "BO", "BP", "BQ", "BR", "BS", "BT", "BU", "BV", "BW", "BX", "BY", "BZ"];
+			$bg_color = ['danger'=>'f1556c', 'primary'=>'6658dd', 'warning'=>'f7b84b'];
 
 			// List Prener dan Date
 			$temp_list_perner = array_unique(array_map(function ($i) { return $i['no_perner']; }, $datas));
@@ -202,6 +203,7 @@ class Admin extends MX_Controller
 			
 			// Nulis Spreadsheet
 			$spreadsheet = new Spreadsheet();
+			$spreadsheet->getDefaultStyle()->getFont()->setName('Cambria')->setSize(10);
 			$sheet = $spreadsheet->getActiveSheet();
 			
 			// Menyesuaikan dengan format
@@ -220,12 +222,14 @@ class Admin extends MX_Controller
 			$sheet->setCellValue('B3', 'Nama');
 			$sheet->mergeCells('B3:B4');
 			$sheet->getStyle('B3:B4')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+			$sheet->getStyle('A3:B4')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFFF99');
 			$idx = 2;
 			foreach ($list_date as $date) {
 				$sheet->setCellValue($abjad[$idx].'3', date("d", strtotime($date)));
 				$sheet->setCellValue($abjad[$idx].'4', date("D", strtotime($date)));
 				$idx++;
 			}
+			$sheet->getStyle('A3:'.$abjad[$idx].'4')->getFont()->setSize(11)->setBold(1);
 
 			for ($i=0; $i < count($list_perner) ; $i++) { 
 				$new_data[$list_perner[$i]] = [];
@@ -244,6 +248,7 @@ class Admin extends MX_Controller
 					}
 					if ( $list_date[$j] == $new_data[$list_perner[$i]][$j]['rooster_date'] ) {
 						$sheet->setCellValue( $abjad[2+$j].($i+5), $new_data[$list_perner[$i]][$j]['absensi']);
+						$sheet->getStyle( $abjad[2+$j].($i+5) )->getFont()->getColor()->setARGB( $bg_color[$new_data[$list_perner[$i]][$j]['bg_color']] );
 					}
 				}
 			}
