@@ -264,10 +264,15 @@ class Admin extends MX_Controller
 			];
 			$sheet->getStyle('A3:'.$highCol.(count($list_perner)+4))->applyFromArray($styleArray);
 
+			header('Content-Type: application/vnd.ms-excel');
+			header('Content-Disposition: attachment;filename="Absen '.$layanan['layanan_desc'].' Bogor '.date("M Y", strtotime($year.'-'.$month.'-01')).'.xlsx"');
+			header('Cache-Control: max-age=0');
 			$writer = new Xlsx($spreadsheet);
 			$filepath = FCPATH . "/uploads/Absen ".$layanan['layanan_desc']." Bogor ".date("M Y", strtotime($year.'-'.$month.'-01')).".xlsx";
-			echo $filepath;
-			$writer->save($filepath);
+			//ob_end_clean();
+			//$writer->save($filepath);
+			$writer->save('php://output');
+			exit;
     	}
     	else{
     		throw new \Exception("Tidak ada variabel yang dikirim!");
