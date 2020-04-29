@@ -224,9 +224,20 @@ class Admin extends MX_Controller
 			$sheet->getStyle('B3:B4')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
 			$sheet->getStyle('A3:B4')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFFF99');
 			$idx = 2;
+			// Baris Keterangan
+			$rowKeterangan = count($list_perner)+6;
+			$sheet->setCellValue('B'.$rowKeterangan, 'Keterangan');
+			$list_keterangan = ['TOTAL MASUK BY ROOSTER', 'TOTAL MASUK', 'ALPA', 'CTF', 'CT', 'CDK', 'TOTAL TIDAK HADIR', '% HARIAN'];
+			for ($i=0; $i < count($list_keterangan) ; $i++) { 
+				$sheet->setCellValue('B'.($rowKeterangan+$i+1), $list_keterangan[$i]);
+			}
+			// End
 			foreach ($list_date as $date) {
 				$sheet->setCellValue($abjad[$idx].'3', date("d", strtotime($date)));
 				$sheet->setCellValue($abjad[$idx].'4', date("D", strtotime($date)));
+				// Keterangan
+				$sheet->setCellValue($abjad[$idx].$rowKeterangan, date("d", strtotime($date)));
+				// End
 				$idx++;
 			}
 			$sheet->getStyle('A3:'.$abjad[$idx].'4')->getFont()->setSize(11)->setBold(1);
@@ -263,6 +274,37 @@ class Admin extends MX_Controller
 				],
 			];
 			$sheet->getStyle('A3:'.$highCol.(count($list_perner)+4))->applyFromArray($styleArray);
+
+			// Keterangan
+			$highestColumnDate = $sheet->getHighestColumn(3);
+			$highestRowPerner = count($list_perner)+4;
+			$highestColumnDateIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($highestColumnDate);
+			$highestColumnDateIndex = $highestColumnDateIndex - 1;
+			for ($j=2; $j < $highestColumnDateIndex; $j++) { 
+				// $sheet->setCellValue($abjad[$j].($rowKeterangan+1), '=COUNTA('.$abjad[$j].'5:'.$abjad[$j].$highestRowPerner.')-COUNTIF('.$abjad[$j].'5:'.$abjad[$j].$highestRowPerner.',"CT")' );
+				$sheet->setCellValue($abjad[$j].($rowKeterangan+1), '=COUNTA('.$abjad[$j].'5:'.$abjad[$j].$highestRowPerner.')-COUNTIF('.$abjad[$j].'5:'.$abjad[$j].$highestRowPerner.',"CT")-COUNTIF('.$abjad[$j].'5:'.$abjad[$j].$highestRowPerner.',"-")-COUNTIF('.$abjad[$j].'5:'.$abjad[$j].$highestRowPerner.',"CIK")-COUNTIF('.$abjad[$j].'5:'.$abjad[$j].$highestRowPerner.',"CML")' );
+				$sheet->setCellValue($abjad[$j].($rowKeterangan+2), '=COUNTA('.$abjad[$j].'5:'.$abjad[$j].$highestRowPerner.')-COUNTIF('.$abjad[$j].'5:'.$abjad[$j].$highestRowPerner.',"CTF")-COUNTIF('.$abjad[$j].'5:'.$abjad[$j].$highestRowPerner.',"CT")-COUNTIF('.$abjad[$j].'5:'.$abjad[$j].$highestRowPerner.',"-")-COUNTIF('.$abjad[$j].'5:'.$abjad[$j].$highestRowPerner.',"CIK")-COUNTIF('.$abjad[$j].'5:'.$abjad[$j].$highestRowPerner.',"AP")-COUNTIF('.$abjad[$j].'5:'.$abjad[$j].$highestRowPerner.',"OP")-COUNTIF('.$abjad[$j].'5:'.$abjad[$j].$highestRowPerner.',"CML")' );
+				$sheet->setCellValue($abjad[$j].($rowKeterangan+3), '=COUNTIF('.$abjad[$j].'5:'.$abjad[$j].$highestRowPerner.',"AP")' );
+				$sheet->setCellValue($abjad[$j].($rowKeterangan+4), '=COUNTIF('.$abjad[$j].'5:'.$abjad[$j].$highestRowPerner.',"CTF")' );
+				$sheet->setCellValue($abjad[$j].($rowKeterangan+5), '=COUNTIF('.$abjad[$j].'5:'.$abjad[$j].$highestRowPerner.',"CT")' );
+				$sheet->setCellValue($abjad[$j].($rowKeterangan+6), '=COUNTIF('.$abjad[$j].'5:'.$abjad[$j].$highestRowPerner.',"CDK")' );
+				$sheet->setCellValue($abjad[$j].($rowKeterangan+7), '='.$abjad[$j].($rowKeterangan+3).'+'.$abjad[$j].($rowKeterangan+4).'+'.$abjad[$j].($rowKeterangan+6).'' );
+				$sheet->setCellValue($abjad[$j].($rowKeterangan+8), '='.$abjad[$j].($rowKeterangan+7).'/'.$abjad[$j].($rowKeterangan+1).'' );
+				$sheet->getStyle($abjad[$j].($rowKeterangan+8))->getNumberFormat()->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_PERCENTAGE_00);
+			}
+			$sheet->setCellValue($abjad[$highestColumnDateIndex].$rowKeterangan, 'Jumlah');
+			$sheet->setCellValue($abjad[$highestColumnDateIndex].($rowKeterangan+1), '=SUM(C'.($rowKeterangan+1).':'.$abjad[$highestColumnDateIndex-1].($rowKeterangan+1).')' );
+			$sheet->setCellValue($abjad[$highestColumnDateIndex].($rowKeterangan+2), '=SUM(C'.($rowKeterangan+2).':'.$abjad[$highestColumnDateIndex-1].($rowKeterangan+2).')' );
+			$sheet->setCellValue($abjad[$highestColumnDateIndex].($rowKeterangan+3), '=SUM(C'.($rowKeterangan+3).':'.$abjad[$highestColumnDateIndex-1].($rowKeterangan+3).')' );
+			$sheet->setCellValue($abjad[$highestColumnDateIndex].($rowKeterangan+4), '=SUM(C'.($rowKeterangan+4).':'.$abjad[$highestColumnDateIndex-1].($rowKeterangan+4).')' );
+			$sheet->setCellValue($abjad[$highestColumnDateIndex].($rowKeterangan+5), '=SUM(C'.($rowKeterangan+5).':'.$abjad[$highestColumnDateIndex-1].($rowKeterangan+5).')' );
+			$sheet->setCellValue($abjad[$highestColumnDateIndex].($rowKeterangan+6), '=SUM(C'.($rowKeterangan+6).':'.$abjad[$highestColumnDateIndex-1].($rowKeterangan+6).')' );
+			$sheet->setCellValue($abjad[$highestColumnDateIndex].($rowKeterangan+7), '=SUM(C'.($rowKeterangan+7).':'.$abjad[$highestColumnDateIndex-1].($rowKeterangan+7).')' );
+			$sheet->setCellValue($abjad[$highestColumnDateIndex].($rowKeterangan+8), '=AVERAGE(C'.($rowKeterangan+8).':'.$abjad[$highestColumnDateIndex-1].($rowKeterangan+8).')' );
+
+			$sheet->getStyle('B'.$rowKeterangan.':'.$abjad[$highestColumnDateIndex].($rowKeterangan+8))->applyFromArray($styleArray);
+
+
 
 			header('Content-Type: application/vnd.ms-excel');
 			header('Content-Disposition: attachment;filename="Absen '.$layanan['layanan_desc'].' Bogor '.date("M Y", strtotime($year.'-'.$month.'-01')).'.xlsx"');
