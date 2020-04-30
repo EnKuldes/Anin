@@ -2,9 +2,9 @@
 	<div class="col-lg-12">
 		<div class="card-box">
 			<div class="card-widgets">
-				<form class="form-inline">
+                <form class="form-inline">
 					<div class="form-group">
-						<div class="input-group input-group-sm">
+						<div class="input-group input-group-sm"  style="display: <?php echo ( $layanan_id != 0 ? "none" : "block");?>">
 							<select class="form-control custom-select" style="width:100%" id="list_layanan"></select>
 						</div>
 						<div class="input-group input-group-sm">
@@ -49,6 +49,9 @@
             	content += '<option value="'+ result[i]['c_layanan'] +'">'+ result[i]['layanan_desc'] +'</option>}'
             }
             $('#list_layanan').html(content)
+            if (v_lay_id != 0) {
+                $('#list_layanan').val(v_lay_id);
+            }
             $('#list_layanan').trigger('change')
         },
         error: function(jqXhr, json, errorThrown){// this are default for ajax errors
@@ -269,6 +272,7 @@
             f_get_report($('#list_layanan').val(), $('#list_year').val(), id)
         }
     });
+    var v_lay_id = <?php echo($layanan_id); ?>;
     function init() {
         f_get_list_layanan()
     }

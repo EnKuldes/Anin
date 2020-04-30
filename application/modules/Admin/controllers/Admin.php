@@ -21,7 +21,7 @@ class Admin extends MX_Controller
 		$auth = $this->auth_model->get_link_auth($cont,$no_perner);
 		// Check is Logged In?
 		if ($this->session->userdata('is_logged_in')) {
-			if ($auth != 0 && $this->session->userdata('user_group') == 2) {
+			if ($auth != 0 && $this->session->userdata('user_group') > 1) {
 				$this->load->helper('url');
 				$this->load->model("admin_model");
 				$this->load->library('../controllers/Globals');
@@ -40,6 +40,7 @@ class Admin extends MX_Controller
     	$data['main_content'] = 'dashboard';
     	$data['main_menu'] = $this->globals->menu(0,$h="",$c="submenu");
 		$data['page_title'] = $this->globals->p_title($data['main_content']);
+		$data['layanan_id'] = $this->session->userdata('layanan_user');
 
     	$this->load->view('includes/template',$data);
     }
@@ -71,6 +72,7 @@ class Admin extends MX_Controller
     	$data['main_content'] = 'report';
     	$data['main_menu'] = $this->globals->menu(0,$h="",$c="submenu");
 		$data['page_title'] = $this->globals->p_title($data['main_content']);
+		$data['layanan_id'] = $this->session->userdata('layanan_user');
 
     	$this->load->view('includes/template',$data);
     }

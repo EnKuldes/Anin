@@ -7,7 +7,7 @@
                 </div>
                 <div class="col-lg-4">
                     <form class="form-inline">
-                        <div class="form-group mx-sm-3">
+                        <div class="form-group mx-sm-3"   style="display: <?php echo ( $layanan_id != 0 ? "none" : "block");?>">
                             <label for="layanan-select" class="mr-2">Layanan </label>
                             <select class="custom-select" id="layanan-select">
                             </select>
@@ -144,6 +144,7 @@
 <script src="<?php echo base_url(); ?>assets/libs/chart-js/Chart.bundle.min.js"></script>
 <!-- Inisiasi -->
 <script type="text/javascript">
+    var v_lay_id = <?php echo($layanan_id); ?>;
     // Grafik/Charts
     var chartBar = document.getElementById("financial-report").getContext("2d");
     chartBar.canvas.width = 1e3;
@@ -241,6 +242,9 @@
                     content += '<option value="'+ result[i]['c_layanan'] +'">'+ result[i]['layanan_desc'] +'</option>}'
                 }
                 $('#layanan-select').html(content)
+                if (v_lay_id != 0) {
+                    $('#layanan-select').val(v_lay_id);
+                }
                 $('#layanan-select').trigger('change')
             },
             error: function(jqXhr, json, errorThrown){// this are default for ajax errors
