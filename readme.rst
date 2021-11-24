@@ -22,6 +22,8 @@ Clone current repository or download the repository [here](https://github.com/En
 
 Edit config files like config.php and database.php file to your needed using your fav text editor.
 
+Import anin.sql to your database.
+
 ## Usage
 
 You can run it by deploying in using Virtual Host or running locally by accessing to the localhost/folder_name.
